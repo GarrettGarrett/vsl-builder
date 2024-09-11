@@ -227,7 +227,7 @@ const sections = {
         question:
           "How does this guarantee address potential concerns or hesitations?",
         placeholder:
-          "It removes financial risk and shows confidence in the program&apos;s value",
+        "It removes financial risk and shows confidence in the program's value",
       },
     ],
   },
