@@ -5,6 +5,12 @@ import openai from '@/lib/openai';
 import sections from '@/generatePrompts/sections';
 import { INPUT_CHAR_LIMITS } from '@/lib/constants';
 
+// Define the interface for form data
+interface FormData {
+  businessDescription: string;
+  [key: string]: string;
+}
+
 function validateInput(input: string, limit: number): string | null {
   if (input.length > limit) {
     return `Input must be ${limit} characters or less.`;
@@ -12,7 +18,7 @@ function validateInput(input: string, limit: number): string | null {
   return null;
 }
 
-function validateFormData(formData: any): string | null {
+function validateFormData(formData: FormData): string | null {
   const { businessDescription, ...sectionAnswers } = formData;
 
   const businessDescriptionError = validateInput(businessDescription, INPUT_CHAR_LIMITS.businessDescription);
@@ -43,7 +49,7 @@ function infuseAnswers(prompt: string, answers: Record<string, string>, business
   return infusedPrompt;
 }
 
-export async function generateVslScript(formData: any, sectionKey: string) {
+export async function generateVslScript(formData: FormData, sectionKey: string) {
   const stream = createStreamableValue();
 
   (async () => {
