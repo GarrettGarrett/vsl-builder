@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     description: 'Modeled after Alex Hormozi\'s Video Sales Letter for the Skool Games',
     images: [
       {
-        url: 'https://vsl-script-builder.vercel.app/og-image.png',
+        url: 'https://vsl-builder.vercel.app/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Open Graph Image Alt',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'VSL Script Builder',
     description: 'Modeled after Alex Hormozi\'s Video Sales Letter for the Skool Games',
-    images: ['https://vsl-script-builder.vercel.app/og-image.png'],
+    images: ['https://vsl-builder.vercel.app/og-image.png'],
   },
 }
 
