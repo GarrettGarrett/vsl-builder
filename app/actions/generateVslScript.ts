@@ -4,6 +4,18 @@ import { createStreamableValue } from "ai/rsc";
 import openai from '@/lib/openai';
 import sections from '@/generatePrompts/sections';
 import { INPUT_CHAR_LIMITS } from '@/lib/constants';
+import { OpenAIError } from 'openai';
+
+// Add this near the top of the file
+const USE_MOCK_API = process.env.USE_MOCK_API === 'true';
+
+// Mock OpenAI API function
+async function mockOpenAIAPI() {
+  const error: any = new Error('Rate limit exceeded');
+  error.status = 429;
+  error.code = 'rate_limit_exceeded';
+  throw error;
+}
 
 // Define the interface for form data
 interface FormData {
@@ -43,7 +55,6 @@ function infuseAnswers(prompt: string, answers: Record<string, string>, business
     return answer;
   });
 
-  // Add the business description to the prompt
   infusedPrompt = `Business Description: ${businessDescription}\n\n${infusedPrompt}`;
   
   return infusedPrompt;
@@ -69,18 +80,35 @@ export async function generateVslScript(formData: FormData, sectionKey: string) 
 
     console.log('Infused prompt:', infusedPrompt);
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: 'user', content: infusedPrompt }],
-      stream: true,
-    });
+    try {
+      if (USE_MOCK_API) {
+        console.log('Using mock API');
+        await mockOpenAIAPI();
+      } else {
+        const response = await openai.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: 'user', content: infusedPrompt }],
+          stream: true,
+        });
 
-    for await (const chunk of response) {
-      const content = chunk.choices[0]?.delta?.content || '';
-      stream.update(content);
+        for await (const chunk of response) {
+          const content = chunk.choices[0]?.delta?.content || '';
+          stream.update(content);
+        }
+      }
+
+      stream.done();
+    } catch (error: any) {
+      console.error('Caught error:', error);
+      if (error.status === 429 || error.code === 'rate_limit_exceeded') {
+        console.log('Detected rate limit error');
+        stream.update('API_LIMIT_REACHED');
+      } else {
+        console.error('Unexpected error:', error);
+        stream.update('An unexpected error occurred. Please try again later.');
+      }
+      stream.done();
     }
-
-    stream.done();
   })();
 
   return stream.value;

@@ -332,6 +332,7 @@ export function VslGenerator() {
     "idle" | "sending" | "success" | "error"
   >("idle");
   const { toast } = useToast();
+  const [apiLimitReached, setApiLimitReached] = useState(false);
 
   useEffect(() => {
     const storedAnswers = localStorage.getItem("vslAnswers");
@@ -453,6 +454,7 @@ export function VslGenerator() {
     setInputErrors({});
 
     setIsGenerating(true);
+    setApiLimitReached(false);
 
     const data = {
       ...answers[currentSection],
@@ -460,25 +462,44 @@ export function VslGenerator() {
       businessName,
     };
 
-    const stream = await generateVslScript(data, currentSection);
+    try {
+      const stream = await generateVslScript(data, currentSection);
 
-    let content = "";
-    for await (const chunk of readStreamableValue(stream)) {
-      content += chunk;
-      setGeneratedContent(content);
+      let content = "";
+      for await (const chunk of readStreamableValue(stream)) {
+        if (chunk === 'API_LIMIT_REACHED') {
+          setApiLimitReached(true);
+          toast({
+            title: "OpenAI Credits Limit Reached",
+            description: "The tool will not work unless the owner adds more credits. We're sorry about that.",
+            variant: "destructive",
+          });
+          break;
+        }
+        content += chunk;
+        setGeneratedContent(content);
+      }
+
+      if (!apiLimitReached) {
+        const newAllGeneratedContent = {
+          ...allGeneratedContent,
+          [currentSection]: content,
+        };
+        setAllGeneratedContent(newAllGeneratedContent);
+        localStorage.setItem(
+          "vslGeneratedContent",
+          JSON.stringify(newAllGeneratedContent)
+        );
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
     }
-
-    const newAllGeneratedContent = {
-      ...allGeneratedContent,
-      [currentSection]: content,
-    };
-    setAllGeneratedContent(newAllGeneratedContent);
-    localStorage.setItem(
-      "vslGeneratedContent",
-      JSON.stringify(newAllGeneratedContent)
-    );
-
-    setIsGenerating(false);
   };
 
   const handleSectionChange = (section: string) => {
@@ -774,13 +795,22 @@ export function VslGenerator() {
                 {inputErrors[currentSection]}
               </p>
             )}
-            <Button type="submit" variant="default" disabled={isGenerating}>
+            <Button 
+              type="submit" 
+              variant="default" 
+              disabled={isGenerating || apiLimitReached}
+            >
               {isGenerating
                 ? "Generating..."
                 : `Generate ${
                     sections[currentSection as keyof typeof sections].nickname
                   }`}
             </Button>
+            {apiLimitReached && (
+              <p className="text-red-500 mt-2">
+                OpenAI credits limit has been reached. The tool will not work unless the owner adds more credits. We're sorry about that.
+              </p>
+            )}
           </form>
         </CardContent>
       </Card>
