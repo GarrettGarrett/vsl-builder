@@ -615,23 +615,23 @@ export function VslGenerator() {
 
   return (
     <div className="container mx-auto px-4 py-8 bg-custom-background min-h-screen relative">
-      <Button
-        onClick={() => window.open("https://www.skool.com/games/about?ref=9dcf2482660141d58dbd9b11226dfa68", "_blank")}
-        variant="outline"
-        className="absolute top-4 left-4 z-10"
-      >
-        <ExternalLink className="mr-2 h-4 w-4" />
-        View Example
-      </Button>
+      <div className="flex justify-between items-center mb-8">
+        <Button
+          onClick={() => window.open("https://www.skool.com/games/about?ref=9dcf2482660141d58dbd9b11226dfa68", "_blank")}
+          variant="outline"
+        >
+          <ExternalLink className="mr-2 h-4 w-4" />
+          View Example
+        </Button>
 
-      <Button
-        onClick={() => setFeedbackDialogOpen(true)}
-        variant="outline"
-        className="absolute top-4 right-4 z-10"
-      >
-        <MessageSquare className="mr-2 h-4 w-4" />
-        Feedback
-      </Button>
+        <Button
+          onClick={() => setFeedbackDialogOpen(true)}
+          variant="outline"
+        >
+          <MessageSquare className="mr-2 h-4 w-4" />
+          Feedback
+        </Button>
+      </div>
 
       <h1 className="text-3xl font-bold text-center mb-8 text-custom-text">
         🎥 Video Sales Letter Builder
