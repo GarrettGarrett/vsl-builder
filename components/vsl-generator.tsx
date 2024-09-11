@@ -27,8 +27,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { sendFeedback } from "@/app/actions/sendFeedback";
 import { cn } from "@/lib/utils";
