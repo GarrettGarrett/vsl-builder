@@ -4,7 +4,6 @@ import { createStreamableValue } from "ai/rsc";
 import openai from '@/lib/openai';
 import sections from '@/generatePrompts/sections';
 import { INPUT_CHAR_LIMITS } from '@/lib/constants';
-import { OpenAIError } from 'openai';
 
 // Add this near the top of the file
 const USE_MOCK_API = process.env.USE_MOCK_API === 'true';
