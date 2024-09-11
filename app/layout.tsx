@@ -4,7 +4,7 @@ import './globals.css'
 import { Toaster } from "@/components/ui/toaster"
 import { CSPostHogProvider } from './providers'
 import type { Metadata } from 'next'
-
+// updated .env on vercel
 
 const fontHeading = Roboto({
   subsets: ['latin'],
