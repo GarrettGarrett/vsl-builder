@@ -657,7 +657,7 @@ export function VslGenerator() {
       <h1 className="text-3xl font-bold text-center mb-8 text-custom-text">
         🎥 Video Sales Letter Builder
       </h1>
-      <Card className="bg-custom-card mb-8">
+      <Card className=" mb-8">
         <CardHeader>
           <CardTitle className="text-custom-primary">
             Business Information
@@ -712,7 +712,7 @@ export function VslGenerator() {
           )}
         </CardContent>
       </Card>
-      <Card className="bg-custom-card">
+      <Card className="">
         <CardHeader>
           <CardTitle className="text-custom-primary">
             {sections[currentSection as keyof typeof sections].nickname}{" "}
@@ -815,7 +815,7 @@ export function VslGenerator() {
         </CardContent>
       </Card>
       {generatedContent && (
-        <Card className="mt-8 bg-custom-card">
+        <Card className="mt-8 ">
           <CardHeader>
             <CardTitle className="text-custom-primary flex justify-between items-center">
               <span>
@@ -878,7 +878,7 @@ export function VslGenerator() {
         )}
       </div>
       {showCombinedVSL && (
-        <Card className="mt-8 bg-custom-card" ref={combinedVSLRef}>
+        <Card className="mt-8 " ref={combinedVSLRef}>
           <CardHeader>
             <CardTitle className="text-custom-primary flex justify-between items-center">
               <span>Combined VSL</span>
