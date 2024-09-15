@@ -186,7 +186,7 @@ const sections = {
     questions: [
       {
         question:
-          "What are the main obstacles that prevent people from succeeding in online businesses?",
+          "What are the main obstacles that prevent people from succeeding in your niche?",
         placeholder:
           "Lack of audience, expertise, and knowledge on how to start and monetize",
       },
